@@ -32,7 +32,7 @@ blogsRouter
     try {
       const blogId = req.params.blogId;
       const blog = await BlogModel.findById(blogId);
-      if (editBlog) {
+      if (blog) {
         res.status(201).send(blog);
       } else {
         next(
@@ -50,6 +50,7 @@ blogsRouter
       const editBlog = await BlogModel.findByIdAndUpdate(blogId, req.body, {
         new: true,
       });
+      console.log(editBlog);
       if (editBlog) {
         res.status(201).send(editBlog);
       } else {
