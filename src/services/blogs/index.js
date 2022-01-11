@@ -1,6 +1,7 @@
 /** @format */
 import express from "express";
 import BlogModel from "./schema.js";
+import createHttpError from "http-errors";
 
 const blogsRouter = express.Router();
 
@@ -31,7 +32,13 @@ blogsRouter
     try {
       const blogId = req.params.blogId;
       const blog = await BlogModel.findById(blogId);
-      res.status(200).send(blog);
+      if (editBlog) {
+        res.status(201).send(blog);
+      } else {
+        next(
+          createHttpError(404, "Blog with this id:", blogId, "is not found")
+        );
+      }
     } catch (error) {
       console.log(error);
       next(error);
@@ -43,17 +50,29 @@ blogsRouter
       const editBlog = await BlogModel.findByIdAndUpdate(blogId, req.body, {
         new: true,
       });
-      res.status(201).send(editBlog);
+      if (editBlog) {
+        res.status(201).send(editBlog);
+      } else {
+        next(
+          createHttpError(404, "Blog with this id:", blogId, "is not found")
+        );
+      }
     } catch (error) {
       console.log(error);
       next(error);
     }
   })
   .delete(async (req, res, next) => {
+    console.log("hello");
     try {
       const blogId = req.params.blogId;
       const deleteBlog = await BlogModel.findByIdAndDelete(blogId);
-      res.status(204).send(deleteBlog);
+      console.log(deleteBlog);
+      if (deleteBlog) {
+        res.status(204).send("Deleted blog", deleteBlog);
+      } else {
+        next(createHttpError(400, "SyntaxError"));
+      }
     } catch (error) {
       console.log(error);
       next(error);
