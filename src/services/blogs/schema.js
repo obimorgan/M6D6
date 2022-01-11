@@ -6,18 +6,18 @@ const { Schema, model } = mongoose;
 
 const blogSchema = new Schema(
   {
-    category: { types: String, required: true },
-    title: { types: String, required: true },
-    cover: { types: String, required: true },
+    category: { type: String, required: true },
+    title: { type: String, required: true },
+    cover: { type: String, required: true },
     readTime: {
       value: { type: Number, required: true },
       unit: { type: String, default: "min" },
     },
     author: {
-      name: { types: String, required: true },
-      avatar: { types: String, required: true },
+      name: { type: String, required: true },
+      avatar: { type: String, required: true },
     },
-    content: { type: String },
+    content: { type: String, required: true },
   },
   {
     timestamps: true,
