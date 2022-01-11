@@ -19,10 +19,10 @@ const port = process.env.PORT;
 server.use(cors());
 server.use(express.json());
 
-server.use(badRequestHandler);
-server.use(notFoundHandler);
-server.use(genericErrorHandler);
-server.use(syntaxError);
+// server.use(badRequestHandler);
+// server.use(notFoundHandler);
+// server.use(genericErrorHandler);
+// server.use(syntaxError);
 
 server.use("/blogs", blogsRouter);
 

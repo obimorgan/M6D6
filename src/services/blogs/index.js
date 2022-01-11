@@ -72,7 +72,7 @@ blogsRouter
       if (deleteBlog) {
         res.status(204).send(deleteBlog);
       } else {
-        throw createHttpError(400, "SyntaxError");
+        // throw createHttpError(400, "SyntaxError");
       }
     } catch (error) {
       console.log(error);
