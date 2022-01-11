@@ -26,4 +26,29 @@ blogsRouter
     }
   });
 
+blogsRouter
+  .route("/:blogId")
+  .get(async (req, res, next) => {
+    try {
+      const blogId = req.params.blogId;
+      const blog = await BlogModel.findById(blogId);
+      res.status(200).send(blog);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  })
+  .put(async (req, res, next) => {
+    try {
+      const blogId = req.params.blogId;
+      const editBlog = await BlogModel.findByIdAndUpdate(blogId, req.body, {
+        new: true,
+      });
+      res.status(201).send(editBlog);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  });
+
 export default blogsRouter;
