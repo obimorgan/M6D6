@@ -5,6 +5,12 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import blogsRouter from "./services/blogs/index.js";
+import {
+  badRequestHandler,
+  notFoundHandler,
+  genericErrorHandler,
+  syntaxError,
+} from "./errorHadlers.js";
 
 const server = express();
 
@@ -12,6 +18,11 @@ const port = process.env.PORT;
 
 server.use(cors());
 server.use(express.json());
+
+server.use(badRequestHandler);
+server.use(notFoundHandler);
+server.use(genericErrorHandler);
+server.use(syntaxError);
 
 server.use("/blogs", blogsRouter);
 

@@ -70,9 +70,9 @@ blogsRouter
       const deleteBlog = await BlogModel.findByIdAndDelete(blogId);
       console.log(deleteBlog);
       if (deleteBlog) {
-        res.status(204).send("Deleted blog", deleteBlog);
+        res.status(204).send(deleteBlog);
       } else {
-        next(createHttpError(400, "SyntaxError"));
+        throw createHttpError(400, "SyntaxError");
       }
     } catch (error) {
       console.log(error);
