@@ -8,7 +8,7 @@ blogsRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const blogs = await BlogModel(req.body);
+      const blogs = await BlogModel.find();
       res.status(200).send(blogs);
     } catch (error) {
       console.log(error);
@@ -17,8 +17,7 @@ blogsRouter
   })
   .post(async (req, res, next) => {
     try {
-      const newBlog = new BlogModel(req.body);
-      const { _id } = await newBlog.save();
+      const newBlog = await BlogModel(req.body).save();
       res.status(201).send(newBlog);
     } catch (error) {
       console.log(error);
@@ -49,6 +48,15 @@ blogsRouter
       console.log(error);
       next(error);
     }
+  })
+  .delete(async (req, res, next) => {
+    try {
+      const blogId = req.params.blogId;
+      const deleteBlog = await BlogModel.findByIdAndDelete(blogId);
+      res.status(204).send(deleteBlog);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   });
-
 export default blogsRouter;
