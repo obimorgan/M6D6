@@ -6,8 +6,8 @@ const { Schema, model } = mongoose;
 
 const commentsSchema = new Schema(
   {
-    name: { String },
-    comments: { String },
+    name: { type: String, required: false },
+    comments: { type: String, required: false },
   },
   {
     timestamps: true,

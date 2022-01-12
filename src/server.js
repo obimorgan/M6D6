@@ -24,7 +24,6 @@ server.use(express.json());
 server.use(badRequestHandler);
 server.use(notFoundHandler);
 server.use(genericErrorHandler);
-server.use(syntaxError);
 
 // server.use("/blogs", blogsRouter, commentsRouter);
 server.use("/blogs", blogsRouter);
