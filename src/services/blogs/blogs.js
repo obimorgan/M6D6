@@ -111,18 +111,8 @@ blogsRouter
       const blogId = req.params.blogId;
       const targetBlog = await BlogModel.findByIdAndUpdate(
         blogId,
-        {
-          ...req.body,
-          comments: [
-            {
-              name: "name",
-              comments: "comments",
-            },
-          ],
-        },
-        {
-          new: true,
-        }
+        { $push: { comments: req.body } },
+        { new: true }
       );
       res.send(targetBlog);
     } catch (error) {
@@ -181,20 +171,28 @@ blogsRouter
   //PUT /blogs/:id/comment/:commentId => edit the comment belonging to the specified blog pos
   .put(async (req, res, next) => {
     try {
+      const commentsId = req.params.commentsId;
       const blogId = req.params.blogId;
-      const editBlog = await BlogModel.findByIdAndUpdate(blogId, req.body, {
-        new: true,
-      });
-      console.log(editBlog);
-      if (editBlog) {
-        res.status(201).send(editBlog);
+      const blog = await BlogModel.findById(blogId);
+      if (blog) {
+        const targetComment = blog.comments.findIndex(
+          ({ _id }) => _id.toString() === commentsId
+        );
+        if (targetComment !== -1) {
+          blog.comments[targetComment] = {
+            ...blog.comments[targetComment].toObject(),
+            ...req.body,
+          };
+        }
       } else {
         next(
-          createHttpError(404, "Blog with this id:", blogId, "is not found")
+          createHttpError(
+            404,
+            `Comments with id ${req.params.blogId} not found!`
+          )
         );
       }
     } catch (error) {
-      console.log(error);
       next(error);
     }
   })
