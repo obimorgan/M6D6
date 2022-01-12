@@ -6,7 +6,9 @@ import createHttpError from "http-errors";
 const blogsRouter = express.Router();
 
 blogsRouter
-  .route("/")
+  .route("/blogId/comments")
+
+  //GET /blogs/:id/comments => returns all the comments for the specified blog post
   .get(async (req, res, next) => {
     try {
       const blogs = await BlogModel.find();
@@ -15,7 +17,12 @@ blogsRouter
       console.log(error);
       next(error);
     }
-  })
+  });
+
+blogsRouter
+  .route("/blogId")
+
+  //POST /blogs/:id => adds a new comment for the specified blog post
   .post(async (req, res, next) => {
     try {
       const newBlog = await BlogModel(req.body).save();
@@ -27,7 +34,9 @@ blogsRouter
   });
 
 blogsRouter
-  .route("/:blogId")
+  .route("/:blogId/comments/:commentsId")
+
+  //  GET /blogs/:id/comments/:commentId=> returns a single comment for the specified blog
   .get(async (req, res, next) => {
     try {
       const blogId = req.params.blogId;
@@ -44,6 +53,8 @@ blogsRouter
       next(error);
     }
   })
+
+  //PUT /blogs/:id/comment/:commentId => edit the comment belonging to the specified blog pos
   .put(async (req, res, next) => {
     try {
       const blogId = req.params.blogId;
@@ -63,6 +74,8 @@ blogsRouter
       next(error);
     }
   })
+
+  //DELETE /blogs/:id/comment/:commentId=> delete the comment belonging to the specified blog post
   .delete(async (req, res, next) => {
     console.log("hello");
     try {
@@ -79,4 +92,5 @@ blogsRouter
       next(error);
     }
   });
+
 export default blogsRouter;

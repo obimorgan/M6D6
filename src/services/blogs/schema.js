@@ -4,6 +4,16 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
+const commentsSchema = new Schema(
+  {
+    name: { String },
+    comments: { String },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const blogSchema = new Schema(
   {
     category: { type: String, required: true },
@@ -18,6 +28,7 @@ const blogSchema = new Schema(
       avatar: { type: String, required: true },
     },
     content: { type: String, required: true },
+    comments: [commentsSchema],
   },
   {
     timestamps: true,
