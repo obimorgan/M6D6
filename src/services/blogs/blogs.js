@@ -176,13 +176,17 @@ blogsRouter
       const blog = await BlogModel.findById(blogId);
       if (blog) {
         const targetComment = blog.comments.findIndex(
-          ({ _id }) => _id.toString() === commentsId
+          (comment) => comment._id.toString() === commentsId
         );
+        console.log("Checkout", targetComment);
+
         if (targetComment !== -1) {
           blog.comments[targetComment] = {
             ...blog.comments[targetComment].toObject(),
             ...req.body,
           };
+          await blog.save(); // connection to Mongo to (save) the comments inside the blog
+          res.send(blog);
         }
       } else {
         next(
