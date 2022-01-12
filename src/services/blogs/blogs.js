@@ -173,11 +173,18 @@ blogsRouter
     try {
       const commentsId = req.params.commentsId;
       const blogId = req.params.blogId;
+
+      // 1) find the blog first
       const blog = await BlogModel.findById(blogId);
+
       if (blog) {
         const targetComment = blog.comments.findIndex(
           (comment) => comment._id.toString() === commentsId
         );
+        // 2) find the comment index in the blog.comments
+        // by matching the params to the existing Id
+        // make sure to strigify the comment id .toString()
+        // as it is an object.
         console.log("Checkout", targetComment);
 
         if (targetComment !== -1) {
@@ -206,7 +213,7 @@ blogsRouter
     try {
       const deleteComment = await BlogModel.findByIdAndUpdate(
         req.params.blogId,
-        { pull: { comments: { _id: req.params.commentsId } } },
+        { $pull: { comments: { _id: req.params.commentsId } } }, // $pull
         { new: true }
       );
       if (deleteComment) {
