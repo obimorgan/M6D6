@@ -6,13 +6,13 @@ import createHttpError from "http-errors";
 const blogsRouter = express.Router();
 
 blogsRouter
-  .route("/blogId/comments")
+  .route("/:blogId/comments")
 
   //GET /blogs/:id/comments => returns all the comments for the specified blog post
   .get(async (req, res, next) => {
     try {
-      const blogs = await BlogModel.find();
-      res.status(200).send(blogs);
+      const blogs = await BlogModel.find(req.params.blogId);
+      res.status(200).send(blogs.comments);
     } catch (error) {
       console.log(error);
       next(error);
@@ -20,7 +20,7 @@ blogsRouter
   });
 
 blogsRouter
-  .route("/blogId")
+  .route("/:blogId")
 
   //POST /blogs/:id => adds a new comment for the specified blog post
   .post(async (req, res, next) => {

@@ -5,7 +5,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import blogsRouter from "./services/blogs/blogs.js";
-import commentsRouter from "./services/blogs/comments.js";
+// import commentsRouter from "./services/blogs/comments.js";
 
 import {
   badRequestHandler,
@@ -26,7 +26,8 @@ server.use(notFoundHandler);
 server.use(genericErrorHandler);
 server.use(syntaxError);
 
-server.use("/blogs", blogsRouter, commentsRouter);
+// server.use("/blogs", blogsRouter, commentsRouter);
+server.use("/blogs", blogsRouter);
 
 mongoose.connect(process.env.MONGO_CONNECTION);
 
