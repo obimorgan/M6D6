@@ -17,4 +17,4 @@ const authorsSchema = new Schema(
   }
 );
 
-export default model("author", authorsSchema);
+export default model("Author", authorsSchema);

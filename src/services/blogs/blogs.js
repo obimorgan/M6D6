@@ -2,6 +2,7 @@
 import express from "express";
 import BlogModel from "./schema.js";
 import createHttpError from "http-errors";
+import q2m from "query-to-mongo";
 
 const blogsRouter = express.Router();
 
@@ -9,8 +10,15 @@ blogsRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const blogs = await BlogModel.find();
-      res.status(200).send(blogs);
+      const queryToMongo = q2m(req.query);
+      const { blogs, total } = await BlogModel.blogsAuthors(queryToMongo);
+      res.send({
+        // links: queryToMongo.links("/blogs", total),
+        pageTotal: Math.ceil(total / queryToMongo.options.limit),
+        total,
+        blogs,
+      });
+      // res.status(200).send(blogs);
     } catch (error) {
       console.log(error);
       next(error);
@@ -31,7 +39,10 @@ blogsRouter
   .get(async (req, res, next) => {
     try {
       const blogId = req.params.blogId;
-      const blog = await BlogModel.findById(blogId);
+      const blog = await BlogModel.findById(blogId).populate({
+        path: "author",
+        select: "first_name last_name",
+      });
       if (blog) {
         res.status(201).send(blog);
       } else {

@@ -27,10 +27,12 @@ const blogSchema = new Schema(
       value: { type: Number, required: true },
       unit: { type: String, default: "min" },
     },
-    author: {
-      name: { type: String, required: true },
-      avatar: { type: String, required: true },
-    },
+    author: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Author",
+      },
+    ],
     content: { type: String, required: true },
     comments: [commentsSchema],
   },
@@ -38,5 +40,17 @@ const blogSchema = new Schema(
     timestamps: true,
   }
 );
+
+blogSchema.static("blogsAuthors", async function (query) {
+  // Cant use arrow function!!
+  const total = await this.countDocuments(query.criteria);
+  const blogs = await this.find(query.criteria)
+    .limit(query.options.limit || 6)
+    .skip(query.options.skip || 0)
+    .sort(query.options.sort)
+    .populate({ path: "author", select: "first_name last_name" });
+
+  return { total, blogs };
+});
 
 export default model("Blog", blogSchema);
