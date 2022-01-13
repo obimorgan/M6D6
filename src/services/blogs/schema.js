@@ -16,7 +16,11 @@ const commentsSchema = new Schema(
 
 const blogSchema = new Schema(
   {
-    category: { type: String, required: true },
+    category: {
+      type: String,
+      required: true,
+      enum: ["Travel", "Health", "IT"],
+    },
     title: { type: String, required: true },
     cover: { type: String, required: true },
     readTime: {

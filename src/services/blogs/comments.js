@@ -35,34 +35,13 @@ commentsRouter
       const blogId = req.params.blogId;
       const targetBlog = await BlogModel.findByIdAndUpdate(
         blogId,
-        { $push: { comments: req.body } },
-        { new: true }
+        { $push: { comments: req.body } }, //the mong $push operator is used to insert
+        { new: true } //the comment into the the blogs comments property which is an array
       );
       res.send(targetBlog);
     } catch (error) {
       next(error);
     }
-    // }
-    // try {
-    //   const blog = await BlogModel.findById(req.body.toObject());
-    //   if (blog) {
-    //     const addComment = await BlogModel.findByIdAndUpdate(
-    //       req.params.blogId,
-    //       { $push: { comments: commentToAdd } },
-    //       { new: true }
-    //     );
-    //     if (addComment) {
-    //       res.send(addComment);
-    //     }
-    //   } else {
-    //     next(
-    //       createHttpError(404, `Blog with id ${req.params.blogId} not found!`)
-    //     );
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   next(error);
-    // }
   });
 
 commentsRouter
@@ -105,12 +84,14 @@ commentsRouter
         const targetComment = blog.comments.findIndex(
           (comment) => comment._id.toString() === commentsId
         );
-        // 2) find the comment index in the blog.comments
-        // by matching the params to the existing Id
+        // 2) find the comment index in blog.commentsId
+        // by matching the params to the existing commentsId in blog.comments
         // make sure to strigify the comment id .toString()
-        // as it is an object.
+        // as it is an objectId.
         console.log("Checkout", targetComment);
 
+        // 3)Once the comment (and the comment index) is found reference it to the
+        // req.body object and save() it to the mongo
         if (targetComment !== -1) {
           blog.comments[targetComment] = {
             ...blog.comments[targetComment].toObject(),
