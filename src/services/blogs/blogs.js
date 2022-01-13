@@ -14,7 +14,7 @@ blogsRouter
       const { blogs, total } = await BlogModel.blogsAuthors(queryToMongo);
       res.send({
         // links: queryToMongo.links("/blogs", total),
-        pageTotal: Math.ceil(total / queryToMongo.options.limit),
+        // pageTotal: Math.ceil(total / queryToMongo.options.limit),
         total,
         blogs,
       });
